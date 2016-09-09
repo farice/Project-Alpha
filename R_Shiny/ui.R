@@ -1,4 +1,3 @@
-
 #MIT License
 
 #Copyright (c) 2016 Faris Sbahi
@@ -30,14 +29,14 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
       uiOutput("choose_columns"),
       uiOutput("choose_spear")
     ),
-
+    
 
     # Show a plot of the generated distribution
     mainPanel(
       tabsetPanel(
         tabPanel("Scatter Matrix", plotOutput("cog_pairs")),
         tabPanel("Regress", plotOutput("cog_log"), verbatimTextOutput("cog_log_summary")),
-        tabPanel("Summary",verbatimTextOutput("cog_eeg_spear"), verbatimTextOutput("cog_eeg_summary"), verbatimTextOutput("cog_eeg_str") )
+        tabPanel("Summary",verbatimTextOutput("cog_eeg_spear_change"),verbatimTextOutput("cog_eeg_spear_6wk"), verbatimTextOutput("cog_eeg_summary"), verbatimTextOutput("cog_eeg_str") )
       )
       )
   )
