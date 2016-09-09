@@ -18,7 +18,8 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
     sidebarPanel(
       fileInput('cog_input', 'Choose Cog Data CSV', accept=c('text/csv', 'text/comma-separated-values/plain')),
       fileInput('eeg_input', 'Choose EEG Data CSV', accept=c('text/csv', 'text/comma-separated-values/plain')),
-      uiOutput("choose_columns")
+      uiOutput("choose_columns"),
+      uiOutput("choose_spear")
     ),
     
 
@@ -26,7 +27,8 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
     mainPanel(
       tabsetPanel(
         tabPanel("Scatter Matrix", plotOutput("cog_pairs")),
-        tabPanel("Summary",verbatimTextOutput("cog_eeg_summary"), verbatimTextOutput("cog_eeg_str") )
+        tabPanel("Regress", plotOutput("cog_log"), verbatimTextOutput("cog_log_summary")),
+        tabPanel("Summary",verbatimTextOutput("cog_eeg_spear"), verbatimTextOutput("cog_eeg_summary"), verbatimTextOutput("cog_eeg_str") )
       )
       )
   )

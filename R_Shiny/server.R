@@ -119,6 +119,33 @@ shinyServer(function(input, output) {
     pairs(as.formula(paste("~", paste(input$sc_columns, collapse = "+"))) ,data = data)
   })
   
+  output$cog_eeg_spear <- renderPrint ({
+    data <- cog_eeg_proc()
+    #print("Pearson")
+    #cor(data$fr_alpha, data$mean_cog,  method = "pearson")
+    print("Spearman")
+    #cat(file=stderr(), paste0("data$",input$spear_column))
+    cor(data[input$spear_column], data$mean_cog,  method = "spearman")
+    #print("Kendall")
+    #cor(data$fr_alpha, data$mean_cog,  method = "kendall")
+  })
+  
+  output$cog_log <- renderPlot ({
+    data <- cog_eeg_proc()
+    if(is.null(data) ) return(NULL)
+    
+    fit = glm(pocd ~ fr_alpha + oc_alpha, data = data, family = binomial)
+    plot(fit)
+  })
+  
+  output$cog_log_summary <- renderPrint ({
+    data <- cog_eeg_proc()
+    if(is.null(data) ) return(NULL)
+    
+    fit = glm(pocd ~ fr_alpha + oc_alpha, data = data, family = binomial)
+    summary(fit)
+  })
+  
   output$choose_columns <- renderUI ({
     data <- cog_eeg_proc()
     if(is.null(data)) return(NULL)
@@ -127,5 +154,16 @@ shinyServer(function(input, output) {
     
     checkboxGroupInput("sc_columns", "Choose Scatter Regressors", choices = colnames, selected = c('mean_cog', 'test.factor_1_delta', 'test.factor_2_delta', 'test.factor_3_delta', 'test.factor_4_delta', 'oc_alpha', 'oc_delta', 'oc_theta', 'fr_delta','fr_alpha','fr_theta'  ))
   })
+  
+  output$choose_spear <- renderUI ({
+    data <- cog_eeg_proc()
+    if(is.null(data)) return(NULL)
+    
+    colnames <- names(data)
+    
+    selectInput("spear_column", "Choose Spearman Regressor", choices = colnames, selected = 'fr_alpha' )
+  })
 
 })
+
+
