@@ -1,5 +1,5 @@
 # Project-Alpha
-Open Source EEG Software for Neuroscientists
+Open Source EEG Analysis Software
 
 ## Shiny Suite
 
