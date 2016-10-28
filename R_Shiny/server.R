@@ -15,7 +15,9 @@
 
 library(shiny)
 library(glmnet)
-
+library(dplyr)
+library(ggplot2)
+library(Hmisc)
 
 shinyServer(function(input, output) {
   
@@ -51,7 +53,7 @@ shinyServer(function(input, output) {
     }
     else{
       withProgress(message = "CONVERTING CSV...", value = 0.4, {
-        read.csv(in_eeg$datapath, header = T, sep = ',')
+        read.csv(in_eeg$datapath, header = T)
       })
     }
     
@@ -68,7 +70,21 @@ shinyServer(function(input, output) {
       oc_eeg <-  filter(data_eeg, elec == '39' | elec == '40' | elec == '41' | elec == '42' | elec == '43' | elec == '44')
       
       eeg_grouped <- group_by(fr_eeg, test.studyno)
-      fr_eeg <- mutate(eeg_grouped, fr_alpha = mean(mean(V8, na.rm = T), mean(V9, na.rm = T), mean(V10, na.rm = T), mean(V11, na.rm = T), mean(V12, na.rm = T)))
+      fr_eeg <- mutate(eeg_grouped, fr_8 = mean(V8, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_9 = mean(V9, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_10 = mean(V10, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_11 = mean(V11, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_12 = mean(V12, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      
+      fr_eeg <- ungroup(fr_eeg)
+      fr_eeg <- mutate(fr_eeg, fr_alpha = rowMeans(fr_eeg[c("fr_8", "fr_9", "fr_10", "fr_11","fr_12")]))
+      
+      cat(file=stderr(), "FR_alpha", fr_eeg$fr_alpha)
       
       eeg_grouped <- group_by(oc_eeg, test.studyno)
       oc_eeg <- mutate(eeg_grouped, oc_alpha = mean(mean(V8, na.rm = T), mean(V9, na.rm = T), mean(V10, na.rm = T), mean(V11, na.rm = T), mean(V12, na.rm = T)))
@@ -132,16 +148,20 @@ shinyServer(function(input, output) {
     data <- cog_eeg_proc()
     #print("Pearson")
     #cor(data$fr_alpha, data$mean_cog_change,  method = "pearson")
-    print("Change in Cognitive Score")
+    print("Spearman Correlations")
     #cat(file=stderr(), paste0("data$",input$spear_column))
-    cor(data[input$spear_column], data$mean_cog_change,  method = "spearman")
+    
+    
+    rcorr(as.matrix(data[c(34:36,70:72,74:81,84:85)]), type = "spearman")
+    
+    
     #print("Kendall")
     #cor(data$fr_alpha, data$mean_cog_change,  method = "kendall")
   })
   
   output$cog_eeg_spear_6wk <- renderPrint ({
     data <- cog_eeg_proc()
-    print("6 Wk Cognitive Score")
+    print("6 Wk Cognitive Score (Individual regressor)")
     cor(data[input$spear_column], data$mean_cog_6wk,  method = "spearman")
 
   })
