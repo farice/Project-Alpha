@@ -156,6 +156,7 @@ shinyServer(function(input, output) {
       
       data_cog$mean_cog_change <- rowMeans(data_cog[,6:9])
       data_cog$mean_cog_6wk <- rowMeans(data_cog[,2:5])
+      data_cog$mean_baseline <- rowMeans(data_cog[,12:15])
       data <- left_join(data, data_cog, by= 'test.studyno')
       
       data
@@ -190,7 +191,7 @@ shinyServer(function(input, output) {
     #cat(file=stderr(), paste0("data$",input$spear_column))
     
     
-    rcorr(as.matrix(data[c(46:48,94:96,98:105,108:109)]), type = "spearman")
+    rcorr(as.matrix(data[c(46:48,94:96,98:105,108:114)]), type = "spearman")
     
     
     #print("Kendall")
