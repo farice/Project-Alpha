@@ -70,6 +70,20 @@ shinyServer(function(input, output) {
       oc_eeg <-  filter(data_eeg, elec == '39' | elec == '40' | elec == '41' | elec == '42' | elec == '43' | elec == '44')
       
       eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_1 = mean(V1, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_2 = mean(V2, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_3 = mean(V3, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_4 = mean(V4, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_5 = mean(V5, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_6 = mean(V6, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
+      fr_eeg <- mutate(eeg_grouped, fr_7 = mean(V7, na.rm = T))
+      eeg_grouped <- group_by(fr_eeg, test.studyno)
       fr_eeg <- mutate(eeg_grouped, fr_8 = mean(V8, na.rm = T))
       eeg_grouped <- group_by(fr_eeg, test.studyno)
       fr_eeg <- mutate(eeg_grouped, fr_9 = mean(V9, na.rm = T))
@@ -81,25 +95,49 @@ shinyServer(function(input, output) {
       fr_eeg <- mutate(eeg_grouped, fr_12 = mean(V12, na.rm = T))
       eeg_grouped <- group_by(fr_eeg, test.studyno)
       
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_1 = mean(V1, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_2 = mean(V2, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_3 = mean(V3, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_4 = mean(V4, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_5 = mean(V5, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_6 = mean(V6, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_7 = mean(V7, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_8 = mean(V8, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_9 = mean(V9, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_10 = mean(V10, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_11 = mean(V11, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      oc_eeg <- mutate(eeg_grouped, oc_12 = mean(V12, na.rm = T))
+      eeg_grouped <- group_by(oc_eeg, test.studyno)
+      
       fr_eeg <- ungroup(fr_eeg)
+      oc_eeg <- ungroup(oc_eeg)
+      
+      
       fr_eeg <- mutate(fr_eeg, fr_alpha = rowMeans(fr_eeg[c("fr_8", "fr_9", "fr_10", "fr_11","fr_12")]))
       
-      cat(file=stderr(), "FR_alpha", fr_eeg$fr_alpha)
+      oc_eeg <- mutate(oc_eeg, oc_alpha = rowMeans(oc_eeg[c("oc_8", "oc_9", "oc_10", "oc_11","oc_12")]))
       
-      eeg_grouped <- group_by(oc_eeg, test.studyno)
-      oc_eeg <- mutate(eeg_grouped, oc_alpha = mean(mean(V8, na.rm = T), mean(V9, na.rm = T), mean(V10, na.rm = T), mean(V11, na.rm = T), mean(V12, na.rm = T)))
+      cat(file=stderr(), "FR_alpha", fr_eeg$fr_alpha, oc_eeg$oc_alpha)
+  
+      fr_eeg <- mutate(fr_eeg, fr_delta = rowMeans(fr_eeg[c("fr_1", "fr_2", "fr_3")]))
       
-      eeg_grouped <- group_by(fr_eeg, test.studyno)
-      fr_eeg <- mutate(eeg_grouped, fr_delta = mean(mean(V1, na.rm = T), mean(V2, na.rm = T), mean(V3, na.rm = T)) )
+      oc_eeg <- mutate(oc_eeg, oc_delta = rowMeans(oc_eeg[c("oc_1", "oc_2", "oc_3")]))
       
-      eeg_grouped <- group_by(oc_eeg, test.studyno)
-      oc_eeg <- mutate(eeg_grouped, oc_delta = mean(mean(V1, na.rm = T), mean(V2, na.rm = T), mean(V3, na.rm = T)))
+      fr_eeg <- mutate(fr_eeg, fr_theta = rowMeans(fr_eeg[c("fr_4", "fr_5", "fr_6", "fr_7")]))
       
-      eeg_grouped <- group_by(fr_eeg, test.studyno)
-      fr_eeg <- mutate(eeg_grouped, fr_theta = mean(mean(V4, na.rm = T), mean(V5, na.rm = T), mean(V6, na.rm = T), mean(V7, na.rm = T)))
-      
-      eeg_grouped <- group_by(oc_eeg, test.studyno)
-      oc_eeg <- mutate(eeg_grouped, oc_theta = mean(mean(V4, na.rm = T), mean(V5, na.rm = T), mean(V6, na.rm = T), mean(V7, na.rm = T)))
+      oc_eeg <- mutate(oc_eeg, oc_theta = rowMeans(oc_eeg[c("oc_4", "oc_5", "oc_6", "oc_7")]))
       
       eeg_grouped <- group_by(fr_eeg, test.studyno)
       fr_eeg <- mutate(eeg_grouped, fr_beta = 1)
@@ -152,7 +190,7 @@ shinyServer(function(input, output) {
     #cat(file=stderr(), paste0("data$",input$spear_column))
     
     
-    rcorr(as.matrix(data[c(34:36,70:72,74:81,84:85)]), type = "spearman")
+    rcorr(as.matrix(data[c(46:48,94:96,98:105,108:109)]), type = "spearman")
     
     
     #print("Kendall")
@@ -201,5 +239,3 @@ shinyServer(function(input, output) {
   })
 
 })
-
-
