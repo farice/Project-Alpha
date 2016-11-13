@@ -9,8 +9,12 @@ One can visualize regressors in a scatter plot matrix, perform logistic regressi
 
 Features are automatically extracted from data that is uploaded with the defined structure.  
 
-## Required data
+### Required data
 
 The cognitive data must be formatted with a unique identifier in each row.
 
-The EEG data must contain an identically named unique identifier column. Furthermore, a column with electrode positions must exist to aggregate frontal and occipital frequency bands. 
+The EEG data must contain an identically named unique identifier column. Furthermore, a column with electrode positions must exist to aggregate frontal and occipital frequency bands.
+
+# BIS Processing
+
+BIS data stored in a .bin datatype can be converted to a standard MATLAB data structure and then preprocessed automatically using EEGLAB. Ensure EEGLAB has already been installed before use.  
