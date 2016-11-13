@@ -99,7 +99,7 @@ eeglab
 
 for i = 74:length(allPatients)
 %[filename,pathname]=uigetfile('*.eeg','Select EEG File');
-if isempty(allPatients(74).Ch2)
+if isempty(allPatients(i).Ch2)
     print('no data')
 else
 
@@ -150,7 +150,7 @@ trialStruct = trialStruct(:,[3 1 2]); % move the subjectID column all the way to
 % artifact detection
 
 % voltage threshold artifact test
-EEG = pop_eegthresh(EEG,1,[1:2],-1000,1000,0,3,0,0);
+EEG = pop_eegthresh(EEG,1,[1:2],-75,75,0,3,0,0);
 trialStruct.artThresh = [EEG.reject.rejthresh'];
 
 % to visualize the trials that have been marked as artifacts
